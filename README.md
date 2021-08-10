@@ -123,6 +123,26 @@ Due to the fact, that crittr is returning a **Promise<String>** you can also use
 })();
 ```
 
+##### Basic - Whithout css
+
+You can skip adding CSS. Crittr will collect all styles (external and inline) from the first url in your list as base CSS.
+```javascript
+Crittr({
+    urls:   [
+        "https://github.com"
+    ],
+    device: {
+        width:  1920,
+        height: 1080
+    }
+}).then( ({critical, rest}) => {
+    console.log(critical);
+}).catch(err => {
+    console.error(err);
+});
+
+```
+
 ##### Advanced - Multiple urls
 
 To use the full power of crittr and get the most of the performance advantage you should pass in multiple urls. As of the fact that the most websites use one css file for multiple pages this is the ultimate way to get the critical css for all of them!
@@ -164,8 +184,8 @@ The CLI usage is not implemented yet :scream:. At the moment there is no need of
 
 | Property            | Values  | Description                                                                                                                                                                                                               |
 | ------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **css**             | string  | Can be a plain css string or path to a css file. If it is a path it has to end with `.css`! Otherwise it is not recognized as a path.                                                                                     |
 | **urls**            | Array   | An array containing the urls to check the css against. Has to be at least 1 url.                                                                                                                                          |
+| css                 | String  | Optional. Can be a plain css string or path to a css file or empty. If it is a path it has to end with `.css`! Otherwise it is not recognized as a path. If not set, the whole website css will be taken.                 |
 | timeout             | Number  | Optional. Integer number of milliseconds to wait for a page to navigate to. After timeout is reached the page navigation is aborted. **ATTENTION**: The critical css of the url timed out is not included. Default: 30000 |
 | pageLoadTimeout     | Number  | Optional. After the page load event is fired the pageLoadTimeout is started. After the amount of milliseconds the ongoing loading of assets or xhr requests is stopped and the extraction continues. Default: 2000        |
 | outputRemainingCss  | Boolean | Optional. If set to false the result obj will not contain any rest css. Only an empty string will be given. Default: true                                                                                                 |

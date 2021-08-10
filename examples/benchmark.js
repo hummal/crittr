@@ -7,7 +7,6 @@
 
 "use strict";
 const path         = require('path');
-const fs           = require('fs-extra');
 const Crittr       = require('../index');
 const rootDir      = path.join(__dirname, "..");
 const staticServer = require("../lib/helper/localFileServer")(rootDir);
@@ -37,8 +36,6 @@ staticServer.listen(8000, async () => {
         "http://localhost:8000/test/data/test.html?3",
         "http://localhost:8000/test/data/test.html?4"
     ];
-
-    const cssString = fs.readFileSync(path.join(rootDir, "/test/data/test.css"), "utf8");
 
     try {
         console.log("Start Critter Benchmark");
@@ -120,7 +117,6 @@ staticServer.listen(8000, async () => {
                 });
             })
         }
-        return;
     };
     await criticalCssWrapper();
     console.timeEnd("CriticalCss");

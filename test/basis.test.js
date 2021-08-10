@@ -1,4 +1,3 @@
-const Critter = require("./../index");
 const fs = require("fs-extra");
 const path = require("path");
 const css = require("css");
@@ -78,7 +77,7 @@ describe("Basis Test", () => {
                 ".forceInclude",
                 "h1",
                 ".vendor_prefix",
-                ".pseudo-selector:after",
+                ".pseudo-selector::after",
                 ".pseudo-selector::before",
                 ".pre .wildcard_test_1 .post",
             ],
@@ -87,7 +86,7 @@ describe("Basis Test", () => {
                 "#id-selector",
                 "div",
                 ".forceInclude",
-                ".pseudo-selector:after",
+                ".pseudo-selector::after",
                 ".pseudo-selector::before",
             ],
             media800: [".standard-selector", "#id-selector", ".forceInclude"],
@@ -143,7 +142,7 @@ describe("Basis Test", () => {
 
         test("MediaQuery 1024 selectors should be included", () => {
             const missingSelectors = [];
-            const selectorPrefix = "all and (min-width: 1024px)===";
+            const selectorPrefix = "(min-width: 1024px)===";
             for (const selector of mustHaveSelectors.media1024) {
                 if (!criticalSelectorRules.has(selectorPrefix + selector)) {
                     missingSelectors.push(selectorPrefix + selector);
@@ -154,7 +153,7 @@ describe("Basis Test", () => {
 
         test("MediaQuery 1024 selectors should NOT be included", () => {
             const falseIncludedSelectors = [];
-            const selectorPrefix = "all and (min-width: 1024px)===";
+            const selectorPrefix = "(min-width: 1024px)===";
             for (const selector of mustMissSelectors.media1024) {
                 if (criticalSelectorRules.has(selectorPrefix + selector)) {
                     falseIncludedSelectors.push(selectorPrefix + selector);
@@ -165,7 +164,7 @@ describe("Basis Test", () => {
 
         test("MediaQuery 800 selectors should be included", () => {
             const missingSelectors = [];
-            const selectorPrefix = "all and (min-width: 800px)===";
+            const selectorPrefix = "(min-width: 800px)===";
             for (const selector of mustHaveSelectors.media800) {
                 if (!criticalSelectorRules.has(selectorPrefix + selector)) {
                     missingSelectors.push(selectorPrefix + selector);
@@ -176,30 +175,13 @@ describe("Basis Test", () => {
 
         test("MediaQuery 800 selectors should NOT be included", () => {
             const falseIncludedSelectors = [];
-            const selectorPrefix = "all and (min-width: 800px)===";
+            const selectorPrefix = "(min-width: 800px)===";
             for (const selector of mustMissSelectors.media800) {
                 if (criticalSelectorRules.has(selectorPrefix + selector)) {
                     falseIncludedSelectors.push(selectorPrefix + selector);
                 }
             }
             expect(falseIncludedSelectors).toHaveLength(0);
-        });
-
-        test("Vendor prefixes still exists", () => {
-            const vendorPrefixRule = resultAstRules.find(
-                (rule) =>
-                    rule.type === "rule" &&
-                    rule.selectors.includes(".vendor_prefix")
-            );
-            const vendorPrefixExists =
-                vendorPrefixRule.declarations.some((declaration) =>
-                    declaration.property.startsWith("-webkit-")
-                ) === true &&
-                vendorPrefixRule.declarations.some((declaration) =>
-                    declaration.property.startsWith("-moz-")
-                ) === true;
-
-            expect(vendorPrefixExists).toBeTruthy();
         });
 
         test("There should not be duplicates of rules", () => {
